@@ -106,3 +106,30 @@ function slideTiles(cells) {
     })
   );
 }
+
+function canMoveUp() {
+  return canMove(grid.cellsByColumn);
+}
+
+function canMoveDown() {
+  return canMove(grid.cellsByColumn.map((column) => [...column].reverse()));
+}
+
+function canMoveLeft() {
+  return canMove(grid.cellsByRow);
+}
+
+function canMoveRight() {
+  return canMove(grid.cellsByRow.map((row) => [...row].reverse()));
+}
+
+function canMove(cells) {
+  return cells.some((group) => {
+    return group.some((cell, index) => {
+      if (index === 0) return false;
+      if (cell.tile == null) return false;
+      const moveToCell = group[index - 1];
+      return moveToCell.canAccept(cell.tile);
+    });
+  });
+}
