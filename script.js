@@ -14,35 +14,50 @@ function setupInput() {
 
 async function handleInput(e) {
   switch (e.key) {
-    case "ArrowUp":
+    case 'ArrowUp':
       if (!canMoveUp()) {
-        setupInput()
-        return
+        setupInput();
+        return;
       }
-      await moveUp()
-      break
-    case "ArrowDown":
+      await moveUp();
+      break;
+    case 'ArrowDown':
       if (!canMoveDown()) {
-        setupInput()
-        return
+        setupInput();
+        return;
       }
-      await moveDown()
-      break
-    case "ArrowLeft":
+      await moveDown();
+      break;
+    case 'ArrowLeft':
       if (!canMoveLeft()) {
-        setupInput()
-        return
+        setupInput();
+        return;
       }
-      await moveLeft()
-      break
-    case "ArrowRight":
+      await moveLeft();
+      break;
+    case 'ArrowRight':
       if (!canMoveRight()) {
-        setupInput()
-        return
+        setupInput();
+        return;
       }
-      await moveRight()
-      break
+      await moveRight();
+      break;
     default:
-      setupInput()
-      return
+      setupInput();
+      return;
   }
+
+  grid.cells.forEach((cell) => cell.mergeTiles());
+
+  const newTile = new Tile(gameBoard);
+  grid.randomEmptyCell().tile = newTile;
+
+  if (!canMoveUp() && !canMoveDown() && !canMoveLeft() && !canMoveRight()) {
+    newTile.waitForTransition(true).then(() => {
+      alert('You lose');
+    });
+    return;
+  }
+
+  setupInput();
+}
